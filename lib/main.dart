@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:newsapp/screens/home_screen.dart';
+// import 'package:newsapp/screens/home_screen.dart';
+import 'package:newsapp/bottom-bar/bottom_bar.dart';
 import 'package:provider/provider.dart';
 import 'providers/news_provider.dart';
 
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
               brightness:
                   newsProvider.isDarkMode ? Brightness.dark : Brightness.light,
             ),
-            home: const HomeScreen(),
+            home: const BottomBar(),
           );
         },
       ),

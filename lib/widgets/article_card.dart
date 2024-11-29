@@ -15,22 +15,53 @@ class ArticleCard extends StatelessWidget {
 
     return Card(
       margin: const EdgeInsets.all(10),
+      elevation: 5, // Optional: adds a shadow effect
+      shape: RoundedRectangleBorder(
+        borderRadius:
+            BorderRadius.circular(10), // Optional: rounds the card corners
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (article.urlToImage.isNotEmpty)
-            Image.network(article.urlToImage, fit: BoxFit.cover),
+            ClipRRect(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10),
+                topRight: Radius.circular(10),
+              ),
+              child: Image.network(
+                article.urlToImage,
+                fit: BoxFit.cover,
+                width: double.infinity, // Full width image
+                height: 200, // Optional: set a fixed height for the image
+              ),
+            ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
               article.title,
-              style: const TextStyle(fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16, // Adjusted font size for readability
+              ),
+              maxLines: 2, // Optional: limits title to 2 lines
+              overflow: TextOverflow
+                  .ellipsis, // Optional: adds ellipsis for long titles
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(article.description),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Text(
+              article.description,
+              style: const TextStyle(
+                fontSize: 14, // Slightly smaller font size for description
+              ),
+              maxLines: 3, // Optional: limits description to 3 lines
+              overflow: TextOverflow
+                  .ellipsis, // Optional: adds ellipsis for long descriptions
+            ),
           ),
+          const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [

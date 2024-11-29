@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../utils/constant/app_color.dart';
-import '../../utils/constant/app_image.dart';
-import '../home  Screen/home_screen.dart';
-import '../profile/user_profile.dart';
-import '../user_history/user_history.dart';
-import '../all_category/all_category.dart';
-import '../taxi/taxi_screen.dart'; // Import your Taxi screen here
+import '../screens/home_screen.dart';
+import '../screens/fav_screen.dart';
+import '../screens/Settings-Screen.dart';
+import '../screens/Category-screen.dart';
+import '../screens/DetailsScreen.dart';
 
 class BottomBar extends StatefulWidget {
   const BottomBar({Key? key}) : super(key: key);
@@ -18,18 +15,19 @@ class BottomBar extends StatefulWidget {
 class _BottomBarState extends State<BottomBar> {
   late PageController _pageController;
 
-  List<Widget> screenList = [
+  // List of pages
+  final List<Widget> _screenList = [
     const HomeScreen(),
-    AllCategory(),
-    TaxiHome(), // Add the Taxi screen here
-    BookingHistory(),
-    Profile(),
+    const DetailsScreen(),
+    const DarkModeToggle(),
+    const CategoryScreen(),
+    const FavoritesScreen(),
   ];
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController();
+    _pageController = PageController(initialPage: 0); // Start from HomeScreen
   }
 
   @override
@@ -39,10 +37,12 @@ class _BottomBarState extends State<BottomBar> {
   }
 
   void onItemTapped(int index) {
-    _pageController.jumpToPage(index);
-    setState(() {
-      AppImages.currentIndex = index;
-    });
+    // Update the current page in the PageController
+    _pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
   }
 
   @override
@@ -52,77 +52,54 @@ class _BottomBarState extends State<BottomBar> {
       child: Scaffold(
         body: PageView(
           controller: _pageController,
+          physics:
+              const NeverScrollableScrollPhysics(), // Disable swipe navigation
           onPageChanged: (index) {
             setState(() {
-              AppImages.currentIndex = index;
+              // Sync the selected index when the page changes
             });
           },
-          children: screenList,
+          children: _screenList,
         ),
-        bottomNavigationBar: bottomNavigationBars(),
+        bottomNavigationBar: _bottomNavigationBars(),
       ),
     );
   }
 
-  Widget bottomNavigationBars() {
-    return Container(
-      color: AppColor.appColor,
-      padding: EdgeInsets.symmetric(vertical: 8.h),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildNavItem(AppImages.bHome, 'Home', 0),
-          _buildNavItem(AppImages.bDiscover, 'Discover', 1),
-          _buildNavItem(AppImages.bTaxi, 'Taxi', 2), // Taxi icon and label
-          _buildNavItem(AppImages.bHistory, 'Bookings', 3),
-          _buildNavItem(AppImages.bProfile, 'Profile', 4),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNavItem(String iconPath, String label, int index) {
-    final isSelected = AppImages.currentIndex == index;
-
-    return GestureDetector(
-      onTap: () => onItemTapped(index),
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-        decoration: isSelected
-            ? BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            const BoxShadow(
-              color: Colors.black26,
-              offset: Offset(2, 2),
-              blurRadius: 6,
-              spreadRadius: 1,
-            ),
-            BoxShadow(
-              color: AppColor.appBannerColor.withOpacity(0.3),
-              offset: const Offset(-2, -2),
-              blurRadius: 4,
-            ),
-          ],
-        )
-            : null,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ImageIcon(AssetImage(iconPath)),
-            SizedBox(height: 4.h),
-            Text(
-              label,
-              style: TextStyle(
-                color: isSelected ? AppColor.appBannerColor : Colors.black54,
-                fontSize: 12.sp,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-              ),
-            ),
-          ],
+  Widget _bottomNavigationBars() {
+    return BottomNavigationBar(
+      showSelectedLabels: true,
+      showUnselectedLabels: true,
+      backgroundColor: Colors.blue, // Adjust to your desired background color
+      unselectedItemColor: const Color(0xFF707070),
+      selectedItemColor: Colors.blueAccent, // Color for selected item
+      selectedFontSize: 14, // Font size for selected text
+      unselectedFontSize: 12, // Font size for unselected text
+      onTap: (index) {
+        onItemTapped(index); // Update page on tap
+      },
+      items: <BottomNavigationBarItem>[
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: 'Home',
         ),
-      ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.search),
+          label: 'Search',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.settings),
+          label: 'Settings',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.category),
+          label: 'Categories',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.favorite),
+          label: 'Favorites',
+        ),
+      ],
     );
   }
 }

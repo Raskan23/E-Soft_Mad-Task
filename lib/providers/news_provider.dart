@@ -8,10 +8,11 @@ class NewsProvider with ChangeNotifier {
   List<Article> _favorites = []; // Initialize as an empty list.
   bool _isLoading = false;
   bool _isDarkMode = false;
+  List<Article> _filteredArticles = []; // Store filtered articles
 
-  List<Article> get articles => _articles;
-  List<Article> get favorites =>
-      _favorites; // Add getter for favorites if needed.
+  List<Article> get articles =>
+      _filteredArticles.isNotEmpty ? _filteredArticles : _articles;
+  List<Article> get favorites => _favorites;
   bool get isLoading => _isLoading;
   bool get isDarkMode => _isDarkMode;
 
@@ -26,6 +27,8 @@ class NewsProvider with ChangeNotifier {
       if (response.statusCode == 200) {
         final data = json.decode(response.body)['articles'] as List;
         _articles = data.map((json) => Article.fromJson(json)).toList();
+        _filteredArticles =
+            List.from(_articles); // Start with all articles unfiltered
       }
     } finally {
       _isLoading = false;
@@ -42,10 +45,38 @@ class NewsProvider with ChangeNotifier {
   // Sort articles based on criteria (Date or Title)
   void sortArticles(String criteria) {
     if (criteria == 'Date') {
-      _articles.sort((a, b) => b.publishedAt.compareTo(a.publishedAt));
+      _filteredArticles.sort((a, b) => b.publishedAt.compareTo(a.publishedAt));
     } else if (criteria == 'Title') {
-      _articles.sort((a, b) => a.title.compareTo(b.title));
+      _filteredArticles.sort((a, b) => a.title.compareTo(b.title));
     }
+    notifyListeners();
+  }
+
+  // Filter articles based on title and date
+  void filterArticles(String titleQuery, String? date) {
+    List<Article> filteredList = _articles;
+
+    // Filter by title query
+    if (titleQuery.isNotEmpty) {
+      filteredList = filteredList
+          .where((article) =>
+              article.title.toLowerCase().contains(titleQuery.toLowerCase()))
+          .toList();
+    }
+
+    // Filter by date if a date is selected
+    if (date != null && date.isNotEmpty) {
+      filteredList = filteredList
+          .where((article) =>
+              article.publishedAt.substring(0, 10) ==
+              date) // Assuming date format is YYYY-MM-DD
+          .toList();
+    }
+
+    // Update filtered articles list
+    _filteredArticles = filteredList;
+
+    // Notify listeners so UI can update
     notifyListeners();
   }
 
@@ -61,6 +92,6 @@ class NewsProvider with ChangeNotifier {
 
   // Check if an article is marked as favorite
   bool isFavorite(Article article) {
-    return _favorites.contains(article); // Ensure it returns a bool.
+    return _favorites.contains(article);
   }
 }

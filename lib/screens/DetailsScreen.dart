@@ -3,14 +3,14 @@ import 'package:provider/provider.dart';
 import '../providers/news_provider.dart';
 import '../widgets/article_card.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class DetailsScreen extends StatefulWidget {
+  const DetailsScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<DetailsScreen> createState() => _DetailsScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _DetailsScreenState extends State<DetailsScreen> {
   final TextEditingController _searchController = TextEditingController();
   final List<String> categories = [
     'Business',
@@ -31,7 +31,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void _filterArticles(String query) {
     final newsProvider = Provider.of<NewsProvider>(context, listen: false);
     if (query.isEmpty) {
-      setState(() {});
+      newsProvider.fetchNews(
+          _selectedCategory); // Fetch original data if the search is empty
     } else {
       setState(() {
         newsProvider.articles.retainWhere(
@@ -48,19 +49,34 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('News App'),
-        actions: [
-          // IconButton(
-          //   icon: Icon(
-          //       newsProvider.isDarkMode ? Icons.dark_mode : Icons.light_mode),
-          //   onPressed: newsProvider.toggleDarkMode,
-          // ),
-        ],
+        title: const Text('Search Screen'),
       ),
       body: Column(
         children: [
           // Search Bar
-
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: 'Search news...',
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+              ),
+            ),
+          ),
+          // Submit Button to trigger search
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: ElevatedButton(
+              onPressed: () {
+                _filterArticles(_searchController.text);
+              },
+              child: const Text('Submit'),
+            ),
+          ),
           // Articles List
           Expanded(
             child: newsProvider.isLoading
