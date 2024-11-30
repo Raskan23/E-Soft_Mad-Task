@@ -18,6 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
     'Sports',
     'Health',
     'Entertainment'
+        'Business',
   ];
   String _selectedCategory = 'Business';
 
