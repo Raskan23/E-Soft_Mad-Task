@@ -3,7 +3,7 @@ import '../screens/home_screen.dart';
 import '../screens/fav_screen.dart';
 import '../screens/Settings-Screen.dart';
 import '../screens/Category-screen.dart';
-import '../screens/DetailsScreen.dart';
+import '../screens/Search-Screen.dart';
 import '../screens/InternalNewsScreen.dart';
 // Import the new screen
 
@@ -20,11 +20,11 @@ class _BottomBarState extends State<BottomBar> {
   // List of pages
   final List<Widget> _screenList = [
     const HomeScreen(),
-    const DetailsScreen(),
+    const SearchScreen(),
     const DarkModeToggle(),
     const CategoryScreen(),
     const FavoritesScreen(),
-    const InternalNewsScreen(), // Add Internal News Screen
+    const InternalNewsScreen(),
   ];
 
   @override

@@ -3,14 +3,14 @@ import 'package:provider/provider.dart';
 import '../providers/news_provider.dart';
 import '../widgets/article_card.dart';
 
-class DetailsScreen extends StatefulWidget {
-  const DetailsScreen({super.key});
+class SearchScreen extends StatefulWidget {
+  const SearchScreen({super.key});
 
   @override
-  State<DetailsScreen> createState() => _DetailsScreenState();
+  State<SearchScreen> createState() => _SearchScreenState();
 }
 
-class _DetailsScreenState extends State<DetailsScreen> {
+class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _searchController = TextEditingController();
   final List<String> categories = [
     'Business',
