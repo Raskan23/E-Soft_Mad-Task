@@ -32,10 +32,9 @@ Students must research and develop a mini mobile application using the provided 
 
 ![1](https://github.com/user-attachments/assets/44b4f2e3-3b71-4b8f-a351-f2a80e5a5817)
 
-![2](https://github.com/user-attachments/assets/64393b95-92f7-470c-a
+![2](https://github.com/user-attachments/assets/7784e6cd-5266-4f26-bb6c-b847f18c0273)
 
 ![3](https://github.com/user-attachments/assets/7076bd4a-ac8d-4ed7-a4b0-3a72d19bf1fd)
-ac8-8cfcebb11201)
 
 ![4](https://github.com/user-attachments/assets/bd864d99-3020-4dc6-b2f3-f365290d0b66)
 
