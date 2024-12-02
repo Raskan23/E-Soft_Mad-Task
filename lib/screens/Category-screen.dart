@@ -11,7 +11,6 @@ class CategoryScreen extends StatefulWidget {
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
-  final TextEditingController _searchController = TextEditingController();
   final List<String> categories = [
     'Business',
     'Technology',
@@ -20,8 +19,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
     'Entertainment'
   ];
   String _selectedCategory = 'Business';
-  String? _selectedDate;
-  String _titleQuery = '';
+  bool _isAscending = true;
 
   @override
   void initState() {
@@ -30,28 +28,14 @@ class _CategoryScreenState extends State<CategoryScreen> {
     newsProvider.fetchNews(_selectedCategory);
   }
 
-  // This function will be used to filter articles by title and date
-  void _filterArticles() {
-    final newsProvider = Provider.of<NewsProvider>(context, listen: false);
-    newsProvider.filterArticles(_titleQuery, _selectedDate);
-  }
-
-  // Function to pick date from the date picker
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime.now(),
-    );
-
-    if (pickedDate != null && pickedDate != DateTime.now()) {
-      setState(() {
-        _selectedDate = "${pickedDate.toLocal()}"
-            .split(' ')[0]; // Get date in YYYY-MM-DD format
-      });
-      _filterArticles(); // Apply filter after selecting date
-    }
+  // Function to sort categories
+  void _sortCategories(bool isAscending) {
+    setState(() {
+      _isAscending = isAscending;
+      categories.sort(
+        (a, b) => isAscending ? a.compareTo(b) : b.compareTo(a),
+      );
+    });
   }
 
   @override
@@ -61,7 +45,28 @@ class _CategoryScreenState extends State<CategoryScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('CategoryScreen'),
-        actions: [],
+        actions: [
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.sort),
+            onSelected: (value) {
+              if (value == 'Ascending') {
+                _sortCategories(true);
+              } else if (value == 'Descending') {
+                _sortCategories(false);
+              }
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: 'Ascending',
+                child: Text('Sort by Ascending'),
+              ),
+              const PopupMenuItem(
+                value: 'Descending',
+                child: Text('Sort by Descending'),
+              ),
+            ],
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -92,48 +97,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   ),
                 );
               }).toList(),
-            ),
-          ),
-          // Title Input Box
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              controller: _searchController,
-              decoration: const InputDecoration(
-                labelText: 'Search by Title',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.search),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  _titleQuery = value;
-                });
-              },
-            ),
-          ),
-          // Submit Button to trigger search
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: ElevatedButton(
-              onPressed: _filterArticles,
-              child: const Text('Submit'),
-            ),
-          ),
-          // Date Picker for manual date entry
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Text(
-                  _selectedDate != null
-                      ? 'Selected Date: $_selectedDate'
-                      : 'No Date Selected',
-                ),
-                IconButton(
-                  icon: const Icon(Icons.calendar_today),
-                  onPressed: () => _selectDate(context),
-                ),
-              ],
             ),
           ),
 

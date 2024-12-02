@@ -19,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
     'Health',
     'Entertainment'
   ];
-  String _selectedCategory = 'Business';
+  final String _selectedCategory = 'Business';
 
   @override
   void initState() {
@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('News App'),
-        actions: [
+        actions: const [
           // IconButton(
           //   icon: Icon(
           //       newsProvider.isDarkMode ? Icons.dark_mode : Icons.light_mode),

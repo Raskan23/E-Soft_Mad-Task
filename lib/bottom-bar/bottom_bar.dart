@@ -4,9 +4,11 @@ import '../screens/fav_screen.dart';
 import '../screens/Settings-Screen.dart';
 import '../screens/Category-screen.dart';
 import '../screens/DetailsScreen.dart';
+import '../screens/InternalNewsScreen.dart';
+// Import the new screen
 
 class BottomBar extends StatefulWidget {
-  const BottomBar({Key? key}) : super(key: key);
+  const BottomBar({super.key});
 
   @override
   State<BottomBar> createState() => _BottomBarState();
@@ -22,6 +24,7 @@ class _BottomBarState extends State<BottomBar> {
     const DarkModeToggle(),
     const CategoryScreen(),
     const FavoritesScreen(),
+    const InternalNewsScreen(), // Add Internal News Screen
   ];
 
   @override
@@ -54,11 +57,6 @@ class _BottomBarState extends State<BottomBar> {
           controller: _pageController,
           physics:
               const NeverScrollableScrollPhysics(), // Disable swipe navigation
-          onPageChanged: (index) {
-            setState(() {
-              // Sync the selected index when the page changes
-            });
-          },
           children: _screenList,
         ),
         bottomNavigationBar: _bottomNavigationBars(),
@@ -78,7 +76,7 @@ class _BottomBarState extends State<BottomBar> {
       onTap: (index) {
         onItemTapped(index); // Update page on tap
       },
-      items: <BottomNavigationBarItem>[
+      items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
           label: 'Home',
@@ -98,6 +96,10 @@ class _BottomBarState extends State<BottomBar> {
         BottomNavigationBarItem(
           icon: Icon(Icons.favorite),
           label: 'Favorites',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.newspaper),
+          label: 'News', // New Internal News Tab
         ),
       ],
     );

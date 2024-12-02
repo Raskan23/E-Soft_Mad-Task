@@ -19,7 +19,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
     'Health',
     'Entertainment'
   ];
-  String _selectedCategory = 'Business';
+  final String _selectedCategory = 'Business';
 
   @override
   void initState() {
